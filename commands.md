@@ -1,5 +1,10 @@
 # Commands needed to do common operations
 
+## Running compose locally
+docker compose build
+
+docker compose up
+
 ## Building
 
 ### AMD Target

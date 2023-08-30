@@ -1,11 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
 from src.commands import db_cli
+from src.extensions.database import db
 from src.settings import APP_NAME, MYSQL_DATABASE_URI
 from src.routes import index_bp
-
-# db = SQLAlchemy()
 
 
 def init_app() -> Flask:
@@ -17,7 +15,7 @@ def init_app() -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_DATABASE_URI
 
     # Initialize extensions
-    # db.init_app(app)
+    db.init_app(app)
 
     with app.app_context():
 
