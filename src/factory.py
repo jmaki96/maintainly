@@ -9,7 +9,7 @@ from src.routes import index_bp
 def init_app() -> Flask:
     """Standard Flask app factory."""
 
-    app = Flask(APP_NAME)
+    app = Flask(APP_NAME, static_url_path='/')
 
     # Configuration (should probably move to an object based config later)
     app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_DATABASE_URI

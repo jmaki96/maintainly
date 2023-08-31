@@ -4,6 +4,7 @@ services:
     build: .
     volumes:
       - ./src:/var/code/src
+      - ./static:/var/code/static
     ports:
       - '8000:8000'
     networks: 
