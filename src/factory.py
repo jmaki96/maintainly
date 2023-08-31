@@ -3,7 +3,7 @@ from flask import Flask
 from src.commands import db_cli
 from src.extensions.bcrypt import bcrypt
 from src.extensions.database import db
-from src.settings import APP_NAME, MYSQL_DATABASE_URI
+from src.settings import APP_NAME, APP_SECRET_KEY, MYSQL_DATABASE_URI
 from src.routes import auth_bp, index_bp
 
 
@@ -13,8 +13,9 @@ def init_app() -> Flask:
     app = Flask(APP_NAME, static_url_path='/')
 
     # Configuration (should probably move to an object based config later)
-    app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_DATABASE_URI
+    app.config['SECRET_KEY'] = APP_SECRET_KEY
     app.config['BCRYPT_LOG_ROUNDS'] = 8  # Should probably actually tune this, but whatever
+    app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_DATABASE_URI
 
     # Initialize extensions
     bcrypt.init_app(app)

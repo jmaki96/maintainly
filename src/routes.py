@@ -1,12 +1,20 @@
-from flask import Blueprint, send_from_directory, render_template, request
+from flask import Blueprint, render_template, request, session
 
 from src.extensions.database import db
 from src.models.user import User
+from src.session_manager import SessionManager
 
 auth_bp = Blueprint('auth_bp', __name__)
 index_bp = Blueprint('index_bp', __name__)
 
 
+@auth_bp.route('/logout', methods=['GET'])
+def logout():
+    SessionManager.log_out()
+    msg = 'User logged out successfully!'
+
+    return render_template('login.html', msg = msg)
+        
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """ Handles login requests."""
@@ -23,10 +31,17 @@ def login():
             return render_template('login.html', msg = 'Incorrect password!')
 
         # Start an authenticated session
+        SessionManager.log_in(user)
+
         return render_template('login.html', msg = 'Logged in successfully!')
     
     elif request.method == 'GET':
-        return render_template('login.html')
+
+        msg = ''
+        if SessionManager.is_logged_in():
+            msg = f'User {SessionManager.get_logged_in_user_id()} is logged in.'
+
+        return render_template('login.html', msg = msg)
 
 
 @auth_bp.route('/signup', methods = ['GET', 'POST'])
@@ -57,7 +72,11 @@ def signup():
 
             return render_template('login.html', msg = 'Account created successfully! Please log in now!')
     elif request.method == 'GET':
-        return render_template('signup.html')
+        msg = ''
+        if SessionManager.is_logged_in():
+            msg = f'User {SessionManager.get_logged_in_user_id()} is logged in.'
+
+        return render_template('signup.html', msg = msg)
 
 
 @index_bp.route('/')

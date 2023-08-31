@@ -22,7 +22,7 @@ class User(db.Model):
         """Authenticates user supplied password.
 
         Args:
-            plaintext_password (str): Plaintext password provided by the user. Never print or store this.
+            plaintext_password (str): Plaintext password provided by the user. Never print or log this.
 
         Returns:
             bool: True if the password is correct for this user.

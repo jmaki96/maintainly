@@ -65,6 +65,11 @@
                         <li>
                             <a href="{{ url_for('auth_bp.signup') }}">Signup</a>
                         </li>
+                        {% if session['loggedin'] == True %}
+                            <li>
+                                <a href="{{ url_for('auth_bp.logout') }}">Logout</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </nav>
                 <!--End of Main Navigation-->
