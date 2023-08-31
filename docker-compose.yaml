@@ -5,6 +5,7 @@ services:
     volumes:
       - ./src:/var/code/src
       - ./static:/var/code/static
+      - ./templates:/var/code/templates
     ports:
       - '8000:8000'
     networks: 
