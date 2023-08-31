@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request
 
 from src.extensions.database import db
 from src.models.user import User
 from src.session_manager import SessionManager
 
 auth_bp = Blueprint('auth_bp', __name__)
-index_bp = Blueprint('index_bp', __name__)
 
 
 @auth_bp.route('/logout', methods=['GET'])
@@ -77,8 +76,3 @@ def signup():
             msg = f'User {SessionManager.get_logged_in_user_id()} is logged in.'
 
         return render_template('signup.html', msg = msg)
-
-
-@index_bp.route('/')
-def index():
-    return render_template('index.html')

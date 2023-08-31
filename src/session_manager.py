@@ -14,6 +14,7 @@ class SessionManager:
         """Sets the session state as logged in for the specified user. If a user is already logged in, it will quietly log them out."""
 
         session['loggedin'] = True
+        session['user_name'] = user.username
         session['user_id'] = user.id
     
     @classmethod
@@ -21,6 +22,7 @@ class SessionManager:
         """Logs out current session if logged in. Does nothing otherwise."""
         
         session['loggedin'] = False
+        session['user_name'] = None
         session['user_id'] = None
 
     @classmethod

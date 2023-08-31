@@ -4,7 +4,9 @@ from src.commands import db_cli
 from src.extensions.bcrypt import bcrypt
 from src.extensions.database import db
 from src.settings import APP_NAME, APP_SECRET_KEY, MYSQL_DATABASE_URI
-from src.routes import auth_bp, index_bp
+from src.routes.auth import auth_bp
+from src.routes.app import app_bp
+from src.routes.index import index_bp
 
 
 def init_app() -> Flask:
@@ -25,6 +27,7 @@ def init_app() -> Flask:
 
         # Register routes
         app.register_blueprint(auth_bp, url_prefix='/')
+        app.register_blueprint(app_bp, url_prefix='/')
         app.register_blueprint(index_bp, url_prefix='/')
 
         # Register commands
