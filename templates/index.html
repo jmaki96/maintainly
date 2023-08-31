@@ -57,13 +57,13 @@
                 <nav id="nav-main">
                     <ul>
                         <li>
-                            <a href="/">Home</a>
+                            <a href="{{ url_for('index_bp.index') }}">Home</a>
                         </li>
                         <li>
-                            <a href="/login.html">Login</a>
+                            <a href="{{ url_for('auth_bp.login') }}">Login</a>
                         </li>
                         <li>
-                            <a href="/signup.html">Signup</a>
+                            <a href="{{ url_for('auth_bp.signup') }}">Signup</a>
                         </li>
                     </ul>
                 </nav>
@@ -87,7 +87,7 @@
             </div>
 
             <!--Call to Action-->
-            <a href="/signup.html" class="button">SIGNUP TODAY</a>
+            <a href="{{ url_for('auth_bp.signup') }}" class="button">SIGNUP TODAY</a>
             <!--End Call to Action-->
 
         </div>

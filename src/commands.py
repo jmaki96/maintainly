@@ -17,6 +17,12 @@ def init_db():
 
     print('db init complete')
 
+@db_cli.command('migrate')
+@with_appcontext
+def migrate_db():
+    print('beginning migration')
+
+    print('migration complete')
 
 @db_cli.command('insert_user')
 @with_appcontext

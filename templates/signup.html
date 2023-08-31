@@ -55,13 +55,13 @@
             <nav id="nav-main">
                 <ul>
                     <li>
-                        <a href="/">Home</a>
+                        <a href="{{ url_for('index_bp.index') }}">Home</a>
                     </li>
                     <li>
-                        <a href="/login.html">Login</a>
+                        <a href="{{ url_for('auth_bp.login') }}">Login</a>
                     </li>
                     <li>
-                        <a href="/signup.html">Signup</a>
+                        <a href="{{ url_for('auth_bp.signup') }}">Signup</a>
                     </li>
                 </ul>
             </nav>
@@ -78,16 +78,17 @@
 <div align="center">
   <div align="center" class="border">
      <div class="header">
-        <h1 class="word">Login</h1>
+        <h1 class="word">Signup</h1>
      </div></br></br></br>
     <h2 class="word">
-        <form action="{{ url_for('index.login') }}" method="post">
-            <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox"/></br></br>
-            <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox"/></br></br></br>
-            <input type="submit" class="btn" value="Sign In"></br></br>
+        <form action="{{ url_for('auth_bp.signup') }}" method="post">
+            <div class="msg">{{ msg }}</div>
+            <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox" required/></br></br>
+            <input id="email" name="email" type="text" placeholder="Enter Your Email" class="textbox" required/></br></br>
+            <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox" required/></br></br></br>
+            <input type="submit" class="btn" value="Sign Up"></br></br>
         </form>
     </h2>
-    <p class="bottom">Don't have an account?  <a class="bottom" href="/signup.html"> Sign Up here</a></p>
   </div>
 </div>
 

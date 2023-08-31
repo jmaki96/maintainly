@@ -11,11 +11,11 @@ class User(db.Model):
     _password = db.Column(db.String(128))
 
     @hybrid_property
-    def password(self):
+    def password(self) -> str:
         return self._password
     
     @password.setter
-    def _set_password(self, plaintext):
+    def _set_password(self, plaintext: str):
         self._password = bcrypt.generate_password_hash(plaintext)
 
     def authenticate(self, plaintext_password: str) -> bool:
