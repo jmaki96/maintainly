@@ -21,7 +21,8 @@ def init_db():
 @db_cli.command('insert_user')
 @with_appcontext
 def insert_user():
-    test_user = User(id=1, username='username1', email='my_email@domain.com')
+    test_user = User(email='my_email@domain.com')
+    test_user.username = 'username' + str(test_user.id)
 
     db.session.add(test_user)
     db.session.commit()
@@ -34,3 +35,12 @@ def get_user(id: int):
     user = db.session.execute(db.select(User).filter_by(id=id)).scalar_one()
 
     print(user)
+
+@db_cli.command('get_all_users')
+@with_appcontext
+def get_all_users():
+    users = db.session.execute(db.select(User))
+
+    for user in users:
+        print(user)
+
