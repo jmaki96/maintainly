@@ -1,31 +1,91 @@
 terraform {
   required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "4.74.0"
+    }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.1"
     }
   }
 }
 
-variable "host" {
-  type = string
+data "terraform_remote_state" "gke" {
+  backend = "local"
+
+  config = {
+    path = "../clusters/terraform.tfstate"
+  }
 }
 
-variable "client_certificate" {
-  type = string
+# Retrieve GKE cluster information
+provider "google" {
+  project = data.terraform_remote_state.gke.outputs.project_id
+  region  = data.terraform_remote_state.gke.outputs.region
+  zone  = data.terraform_remote_state.gke.outputs.zone
 }
 
-variable "client_key" {
-  type = string
-}
+# Configure kubernetes provider with Oauth2 access token.
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config
+# This fetches a new token, which will expire in 1 hour.
+data "google_client_config" "default" {}
 
-variable "cluster_ca_certificate" {
-  type = string
+data "google_container_cluster" "my_cluster" {
+  name     = data.terraform_remote_state.gke.outputs.kubernetes_cluster_name
+  location = data.terraform_remote_state.gke.outputs.zone
 }
 
 provider "kubernetes" {
-  host = var.host
+  host = data.terraform_remote_state.gke.outputs.kubernetes_cluster_host
 
-  client_certificate     = base64decode(var.client_certificate)
-  client_key             = base64decode(var.client_key)
-  cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
+}
+
+
+resource "kubernetes_deployment" "nginx" {
+  metadata {
+    name = "scalable-nginx-example"
+    labels = {
+      App = "ScalableNginxExample"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        App = "ScalableNginxExample"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "ScalableNginxExample"
+        }
+      }
+      spec {
+        container {
+          image = "nginx:1.7.8"
+          name  = "example"
+
+          port {
+            container_port = 80
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
 }
