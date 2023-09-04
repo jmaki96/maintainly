@@ -44,11 +44,11 @@ provider "kubernetes" {
 }
 
 
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment" "maintainly-prod" {
   metadata {
-    name = "scalable-nginx-example"
+    name = "maintainly-prod"
     labels = {
-      App = "ScalableNginxExample"
+      App = "maintainly"
     }
   }
 
@@ -56,22 +56,22 @@ resource "kubernetes_deployment" "nginx" {
     replicas = 2
     selector {
       match_labels = {
-        App = "ScalableNginxExample"
+        App = "maintainly"
       }
     }
     template {
       metadata {
         labels = {
-          App = "ScalableNginxExample"
+          App = "maintainly"
         }
       }
       spec {
         container {
-          image = "nginx:1.7.8"
-          name  = "example"
+          image = "us-east1-docker.pkg.dev/maintainly-prod/maintainly-dockerhub/maintainly_amd@sha256:4df1283e698e14056abf4c764a7e3e38a43bca25c3cf5de737625560f1f519a5"
+          name  = "maintainly-app"
 
           port {
-            container_port = 80
+            container_port = 8000
           }
 
           resources {
